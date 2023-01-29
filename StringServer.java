@@ -3,17 +3,12 @@ import java.net.URI;
 import java.util.ArrayList;
 
 class StringServerHandler implements URLHandler {
-    // The one bit of state on the server: a number that will be manipulated by
-    // various requests.
-    int num = 0;
-
+    ArrayList<String> messages = new ArrayList<String>();
     public String handleRequest(URI url) {
-        ArrayList<String> messages = new ArrayList();
         if (url.getPath().equals("/add-message")) {
             String[] parameters = url.getQuery().split("=");
             messages.add(parameters[1]);
-            return messages.toString();
-
+            return String.join("\n", messages); 
         }
         else {
             return "404 not Found";
@@ -29,6 +24,6 @@ class StringServer {
 
         int port = Integer.parseInt(args[0]);
 
-        Server.start(port, new Handler());
+        Server.start(port, new StringServerHandler());
     }
 }
